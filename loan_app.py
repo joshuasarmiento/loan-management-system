@@ -14,18 +14,29 @@ class LoanApp:
         self.root = root
         self.root.title("Offline Loan Management System")
         self.root.state('zoomed')  # Maximize window
-        self.root.configure(bg='#2E2E2E')  # Dark theme background
-        
+        self.root.configure(bg='#F0F0F0')
+
         # Style configuration
         style = ttk.Style()
         style.theme_use('clam')
-        style.configure('TNotebook', background='#2E2E2E', tabmargins=0)
-        style.configure('TNotebook.Tab', background='#3C3C3C', foreground='white', padding=[10, 5], font=('Arial', 12))
-        style.map('TNotebook.Tab', background=[('selected', '#4CAF50')])
-        style.configure('TButton', background='#4CAF50', foreground='white', font=('Arial', 11))
-        style.configure('TLabel', background='#2E2E2E', foreground='white', font=('Arial', 11))
-        style.configure('TEntry', fieldbackground='#3C3C3C', foreground='white')
-        style.configure('TCombobox', fieldbackground='#3C3C3C', foreground='white')
+
+        # Define colors
+        BG_COLOR = '#F0F0F0'
+        TEXT_COLOR = '#333333'
+        PRIMARY_COLOR = '#0078D7'
+        WHITE = '#FFFFFF'
+        BORDER_COLOR = '#CCCCCC'
+
+        style.configure('.', background=BG_COLOR, foreground=TEXT_COLOR, font=('Arial', 11))
+        style.configure('TNotebook', background=BG_COLOR, tabmargins=0)
+        style.configure('TNotebook.Tab', background='#E0E0E0', foreground=TEXT_COLOR, padding=[10, 5], font=('Arial', 12))
+        style.map('TNotebook.Tab', background=[('selected', PRIMARY_COLOR)], foreground=[('selected', WHITE)])
+        style.configure('TButton', background=PRIMARY_COLOR, foreground=WHITE, font=('Arial', 11, 'bold'), borderwidth=0)
+        style.map('TButton', background=[('active', '#005A9E')])
+        style.configure('TLabel', background=BG_COLOR, foreground=TEXT_COLOR, font=('Arial', 11))
+        style.configure('TEntry', fieldbackground=WHITE, foreground=TEXT_COLOR, bordercolor=BORDER_COLOR, insertcolor=TEXT_COLOR)
+        style.configure('TCombobox', fieldbackground=WHITE, foreground=TEXT_COLOR, bordercolor=BORDER_COLOR, arrowcolor=PRIMARY_COLOR)
+        style.map('TCombobox', fieldbackground=[('readonly', WHITE)])
         
         # Create notebook
         self.notebook = ttk.Notebook(root)
@@ -77,9 +88,9 @@ class LoanApp:
         # Status pie chart
         status_df = pd.DataFrame(data['status_data'], columns=['Status', 'Count'])
         fig1, ax1 = plt.subplots(figsize=(6, 4))
-        ax1.pie(status_df['Count'], labels=status_df['Status'], autopct='%1.1f%%', colors=['#4CAF50', '#FF5722', '#2196F3'])
-        ax1.set_title("Loan Status Distribution", color='white')
-        fig1.set_facecolor('#2E2E2E')
+        ax1.pie(status_df['Count'], labels=status_df['Status'], autopct='%1.1f%%', colors=['#0078D7', '#FF5722', '#2196F3'])
+        ax1.set_title("Loan Status Distribution", color='#333333')
+        fig1.set_facecolor('#F0F0F0')
         
         canvas1 = FigureCanvasTkAgg(fig1, master=charts_frame)
         canvas1.draw()
@@ -88,13 +99,13 @@ class LoanApp:
         # Amount distribution histogram
         if data['amounts']:
             fig2, ax2 = plt.subplots(figsize=(6, 4))
-            ax2.hist(data['amounts'], bins=10, color='#4CAF50', edgecolor='white')
-            ax2.set_title("Loan Amount Distribution", color='white')
-            ax2.set_xlabel("Amount (₱)", color='white')
-            ax2.set_ylabel("Count", color='white')
-            fig2.set_facecolor('#2E2E2E')
-            ax2.set_facecolor('#3C3C3C')
-            ax2.tick_params(colors='white')
+            ax2.hist(data['amounts'], bins=10, color='#0078D7', edgecolor='white')
+            ax2.set_title("Loan Amount Distribution", color='#333333')
+            ax2.set_xlabel("Amount (₱)", color='#333333')
+            ax2.set_ylabel("Count", color='#333333')
+            fig2.set_facecolor('#F0F0F0')
+            ax2.set_facecolor('#FFFFFF')
+            ax2.tick_params(colors='#333333')
             
             canvas2 = FigureCanvasTkAgg(fig2, master=charts_frame)
             canvas2.draw()
