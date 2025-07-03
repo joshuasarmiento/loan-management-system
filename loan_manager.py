@@ -117,6 +117,13 @@ class LoanManagementSystem:
         self.cursor.execute('SELECT full_name FROM borrowers')
         return [row[0] for row in self.cursor.fetchall()]
 
+    def get_loan_balance(self, loan_id):
+        self.cursor.execute('SELECT amount FROM loans WHERE loan_id = ?', (loan_id,))
+        loan_amount = self.cursor.fetchone()[0]
+        self.cursor.execute('SELECT SUM(amount) FROM payments WHERE loan_id = ?', (loan_id,))
+        total_paid = self.cursor.fetchone()[0] or 0
+        return loan_amount - total_paid
+
     def export_loan_report(self):
         loans = pd.read_sql_query('SELECT l.loan_id, b.full_name, l.amount, l.interest_rate, l.term_months, l.start_date, l.status '
                                  'FROM loans l JOIN borrowers b ON l.borrower_id = b.borrower_id', self.conn)

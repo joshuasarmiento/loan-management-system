@@ -77,19 +77,23 @@ For users with Python installed:
 
 1. **Launch the Application**:
    - Open the application using the executable or source code method.
-2. **Navigate Tabs**:
+2. **Login Credentials**:
+   - **Username**: `admin`
+   - **Password**: `password`
+   - **Note**: These are hardcoded for demonstration purposes and are not secure for production environments.
+3. **Navigate Tabs**:
    - **Dashboard**: View metrics (total loans, total amount, active/overdue loans) and charts (status and amount distribution).
    - **Borrowers**: Add borrowers (Full Name required) and search by name/ID.
    - **Loans**: Add loans by selecting a borrower from the dropdown, entering amount, interest rate, and term. Search by name/loan ID.
    - **Payments**: Record payments by selecting a borrower and entering loan ID and amount.
    - **Reports**: Export loan reports to CSV or backup the database.
-3. **Example Workflow**:
+4. **Example Workflow**:
    - Add a borrower (e.g., Full Name: John Doe, Contact: 123-456-7890, Email: john@example.com, ID Type: Passport, ID Number: 123456).
    - Add a loan (e.g., Borrower: John Doe, Amount: 10000, Interest: 5%, Term: 12 months).
    - Record a payment (e.g., Borrower: John Doe, Loan ID: 1, Amount: 1000).
    - Check the dashboard for updated metrics and charts.
    - Export a report or backup the database from the Reports tab.
-4. **Data Storage**:
+5. **Data Storage**:
    - All data is stored in `loan_management.db`.
    - Back up this file regularly using the Reports tab.
 
