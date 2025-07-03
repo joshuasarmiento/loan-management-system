@@ -1,0 +1,2 @@
+loan_id,full_name,amount,interest_rate,term_months,start_date,status
+1,Joshua Sarmiento,15000.0,3.0,6,2025-07-03,Active
