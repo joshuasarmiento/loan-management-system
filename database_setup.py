@@ -1,4 +1,5 @@
 import sqlite3
+import hashlib
 
 def create_database():
     conn = sqlite3.connect('loan_management.db')
@@ -42,6 +43,24 @@ def create_database():
             FOREIGN KEY (loan_id) REFERENCES loans (loan_id)
         )
     ''')
+    
+    # Create Users table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            username TEXT PRIMARY KEY,
+            password_hash TEXT NOT NULL
+        )
+    ''')
+
+    # Add default admin user if not exists
+    default_username = "admin"
+    default_password = "password"
+    hashed_password = hashlib.sha256(default_password.encode()).hexdigest()
+
+    cursor.execute("SELECT * FROM users WHERE username = ?", (default_username,))
+    if not cursor.fetchone():
+        cursor.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)", (default_username, hashed_password))
+        print(f"Default user '{default_username}' added.")
     
     conn.commit()
     conn.close()

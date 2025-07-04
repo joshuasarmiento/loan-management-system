@@ -1,11 +1,23 @@
 import sqlite3
 from datetime import datetime, timedelta
 import pandas as pd
+import hashlib
 
 class LoanManagementSystem:
     def __init__(self):
         self.conn = sqlite3.connect('loan_management.db')
         self.cursor = self.conn.cursor()
+
+    def authenticate_user(self, username, password):
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        self.cursor.execute("SELECT * FROM users WHERE username = ? AND password_hash = ?", (username, hashed_password))
+        return self.cursor.fetchone() is not None
+
+    def change_password(self, username, new_password):
+        hashed_password = hashlib.sha256(new_password.encode()).hexdigest()
+        self.cursor.execute("UPDATE users SET password_hash = ? WHERE username = ?", (hashed_password, username))
+        self.conn.commit()
+        return self.cursor.rowcount > 0
 
     def add_borrower(self, full_name, contact, email, address, id_type, id_number):
         try:

@@ -433,6 +433,47 @@ class LoanApp:
         self.back_button_frame.pack_forget() # Hide the back button frame
         self.show_login_callback()  # Call the function to show the login window again
 
+    def show_change_password_dialog(self):
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Change Password")
+        dialog.transient(self.root)
+        dialog.grab_set()
+        dialog.resizable(False, False)
+
+        # Center the dialog
+        dialog.update_idletasks()
+        x = self.root.winfo_x() + (self.root.winfo_width() // 2) - (dialog.winfo_width() // 2)
+        y = self.root.winfo_y() + (self.root.winfo_height() // 2) - (dialog.winfo_height() // 2)
+        dialog.geometry(f"+{x}+{y}")
+
+        ttk.Label(dialog, text="New Password:").pack(pady=5)
+        new_password_entry = ttk.Entry(dialog, show="*")
+        new_password_entry.pack(pady=5)
+
+        ttk.Label(dialog, text="Confirm New Password:").pack(pady=5)
+        confirm_password_entry = ttk.Entry(dialog, show="*")
+        confirm_password_entry.pack(pady=5)
+
+        def change_password_action():
+            new_pass = new_password_entry.get()
+            confirm_pass = confirm_password_entry.get()
+
+            if new_pass != confirm_pass:
+                messagebox.showerror("Error", "Passwords do not match", parent=dialog)
+                return
+            if not new_pass:
+                messagebox.showerror("Error", "Password cannot be empty", parent=dialog)
+                return
+
+            # Assuming the current user is 'admin' for now
+            if self.system.change_password("admin", new_pass):
+                messagebox.showinfo("Success", "Password changed successfully!", parent=dialog)
+                dialog.destroy()
+            else:
+                messagebox.showerror("Error", "Failed to change password", parent=dialog)
+
+        ttk.Button(dialog, text="Change Password", command=change_password_action).pack(pady=10)
+
     def __del__(self):
         self.system.close()
 
@@ -480,6 +521,12 @@ class LoanApp:
         report_button = ttk.Button(report_shadow_frame, text="Reports", image=self.report_icon, compound=tk.TOP, command=lambda: self.show_view("Reports"))
         report_button.pack(expand=True, fill='both', padx=5, pady=5)
 
+        # Change Password Button
+        change_password_shadow_frame = ttk.Frame(self.main_menu_frame, style='Shadow.TFrame')
+        change_password_shadow_frame.grid(row=2, column=2, padx=20, pady=20, sticky="nsew") # Adjusted row to 2
+        change_password_button = ttk.Button(change_password_shadow_frame, text="Change Password", image=self.logout_icon, compound=tk.TOP, command=self.show_change_password_dialog)
+        change_password_button.pack(expand=True, fill='both', padx=5, pady=5)
+
     def show_view(self, view_name):
         # Hide all views
         for view in self.views.values():
@@ -510,7 +557,9 @@ if __name__ == "__main__":
 
     def authenticate(username, password):
         global login_successful
-        if username == "admin" and password == "password":  # Hardcoded credentials
+        # Use the LoanManagementSystem to authenticate
+        system_instance = LoanManagementSystem() # Create a temporary instance for authentication
+        if system_instance.authenticate_user(username, password):
             login_successful = True
             messagebox.showinfo("Login Success", "Welcome to Loan Management System!")
             if login_window: # Check if login_window exists before destroying
