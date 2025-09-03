@@ -108,19 +108,13 @@ For users with Python installed:
    - Ensure numeric fields (e.g., Amount, Loan ID) contain valid numbers.
    - Borrower must be selected from the dropdown.
 - **Contact Support**:
-   - Contact [your support email or phone number].
+   - Contact [supremojoshua22@gmail.com].
 
 ## Security
 
 - Data is stored in `loan_management.db`. Ensure your computer is secure (e.g., use antivirus, restrict access).
 - Use the Reports tab to back up `loan_management.db` to a secure location (e.g., USB drive).
 - Consider encrypting the database file for sensitive data.
-
-## System Requirements
-
-- **OS**: Windows 10/11, macOS 10.14+, or Linux (Ubuntu 20.04+ recommended).
-- **Disk Space**: ~500MB for executable and database.
-- **Python** (for source code): Python 3.8+ with `matplotlib`, `pandas`, `numpy`.
 
 ## Notes
 
